@@ -33,5 +33,5 @@ FixedReplayRunner.training_steps = 250000  # agent steps
 FixedReplayRunner.evaluation_steps = 125000  # agent steps
 FixedReplayRunner.max_steps_per_episode = 27000  # agent steps
 
-WrappedPrioritizedReplayBuffer.replay_capacity = 1000000
+WrappedPrioritizedReplayBuffer.replay_capacity = 50000
 WrappedPrioritizedReplayBuffer.batch_size = 32
