@@ -30,7 +30,7 @@ FixedReplayRunner.training_steps = 250000
 FixedReplayRunner.evaluation_steps = 125000
 FixedReplayRunner.max_steps_per_episode = 27000
 
-WrappedFixedReplayBuffer.replay_capacity = 10000
+WrappedFixedReplayBuffer.replay_capacity = 1000
 WrappedFixedReplayBuffer.batch_size = 32
 
 
