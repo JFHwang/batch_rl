@@ -71,16 +71,26 @@ class FixedReplayBuffer(object):
     """Loads a OutOfGraphReplayBuffer replay buffer."""
     try:
       # pytype: disable=attribute-error
+      tf.logging.info(
+          f'Starting to load from ckpt {suffix} from {self._data_dir}')
       replay_buffer = circular_replay_buffer.OutOfGraphReplayBuffer(
           *self._args, **self._kwargs)
       replay_buffer.load(self._data_dir, suffix)
+      # pylint: disable = protected-access
+      replay_capacity = replay_buffer._replay_capacity
+      tf.logging.info(f'Capacity: {replay_buffer._replay_capacity}')
+      for name, array in replay_buffer._store.items():
+        # This frees unused RAM if replay_capacity is smaller than 1M
+        replay_buffer._store[name] = array[:replay_capacity + 100].copy()
+        tf.logging.info(f'{name}: {array.shape}')
       tf.logging.info('Loaded replay buffer ckpt {} from {}'.format(
           suffix, self._data_dir))
+      # pylint: enable=protected-access
       # pytype: enable=attribute-error
       return replay_buffer
     except tf.errors.NotFoundError:
       return None
-
+    
   def _load_replay_buffers(self, num_buffers=None):
     """Loads multiple checkpoints into a list of replay buffers."""
     if not self._loaded_buffers:  # pytype: disable=attribute-error
